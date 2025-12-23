@@ -6884,3 +6884,212 @@ vector.InferenceObject
 2025-11-18 17:31:38,561 - httpx - INFO - HTTP Request: POST http://10.200.0.10:30491/v1/chat/completions "HTTP/1.1 200 OK"
 2025-11-18 17:31:38,568 - core.memory_manager - WARNING - 记忆保存失败 (project_brain): 'role'
 2025-11-18 17:31:38,569 - core.memory_manager - ERROR - 备选方案也失败: 'role'
+2025-12-08 10:11:15,087 - core.memory_manager - ERROR - 记忆系统初始化失败: [Errno 61] Connection refused
+2025-12-08 10:11:15,088 - utils.helpers - CRITICAL - 应用程序初始化失败: [Errno 61] Connection refused
+2025-12-08 10:12:01,555 - httpx - INFO - HTTP Request: GET http://localhost:6333 "HTTP/1.1 200 OK"
+2025-12-08 10:12:01,560 - httpx - INFO - HTTP Request: GET http://localhost:6333/collections "HTTP/1.1 200 OK"
+2025-12-08 10:12:01,581 - httpx - INFO - HTTP Request: PUT http://localhost:6333/collections/mem0_multiagent/index?wait=true "HTTP/1.1 200 OK"
+2025-12-08 10:12:01,582 - mem0.vector_stores.qdrant - INFO - Created index for user_id in collection mem0_multiagent
+2025-12-08 10:12:01,590 - httpx - INFO - HTTP Request: PUT http://localhost:6333/collections/mem0_multiagent/index?wait=true "HTTP/1.1 200 OK"
+2025-12-08 10:12:01,590 - mem0.vector_stores.qdrant - INFO - Created index for agent_id in collection mem0_multiagent
+2025-12-08 10:12:01,620 - httpx - INFO - HTTP Request: PUT http://localhost:6333/collections/mem0_multiagent/index?wait=true "HTTP/1.1 200 OK"
+2025-12-08 10:12:01,620 - mem0.vector_stores.qdrant - INFO - Created index for run_id in collection mem0_multiagent
+2025-12-08 10:12:01,629 - httpx - INFO - HTTP Request: PUT http://localhost:6333/collections/mem0_multiagent/index?wait=true "HTTP/1.1 200 OK"
+2025-12-08 10:12:01,629 - mem0.vector_stores.qdrant - INFO - Created index for actor_id in collection mem0_multiagent
+2025-12-08 10:12:01,664 - httpx - INFO - HTTP Request: GET http://localhost:6333 "HTTP/1.1 200 OK"
+2025-12-08 10:12:01,666 - httpx - INFO - HTTP Request: GET http://localhost:6333/collections "HTTP/1.1 200 OK"
+2025-12-08 10:12:01,672 - httpx - INFO - HTTP Request: PUT http://localhost:6333/collections/mem0migrations/index?wait=true "HTTP/1.1 200 OK"
+2025-12-08 10:12:01,672 - mem0.vector_stores.qdrant - INFO - Created index for user_id in collection mem0migrations
+2025-12-08 10:12:01,676 - httpx - INFO - HTTP Request: PUT http://localhost:6333/collections/mem0migrations/index?wait=true "HTTP/1.1 200 OK"
+2025-12-08 10:12:01,676 - mem0.vector_stores.qdrant - INFO - Created index for agent_id in collection mem0migrations
+2025-12-08 10:12:01,682 - httpx - INFO - HTTP Request: PUT http://localhost:6333/collections/mem0migrations/index?wait=true "HTTP/1.1 200 OK"
+2025-12-08 10:12:01,682 - mem0.vector_stores.qdrant - INFO - Created index for run_id in collection mem0migrations
+2025-12-08 10:12:01,686 - httpx - INFO - HTTP Request: PUT http://localhost:6333/collections/mem0migrations/index?wait=true "HTTP/1.1 200 OK"
+2025-12-08 10:12:01,686 - mem0.vector_stores.qdrant - INFO - Created index for actor_id in collection mem0migrations
+2025-12-08 10:12:01,693 - httpx - INFO - HTTP Request: POST http://localhost:6333/collections/mem0migrations/points "HTTP/1.1 200 OK"
+2025-12-08 10:12:01,719 - core.memory_manager - INFO - 记忆管理器初始化成功
+2025-12-08 10:12:01,726 - core.chat_engine - INFO - 聊天引擎初始化成功
+2025-12-08 10:12:01,726 - utils.helpers - INFO - 聊天应用程序初始化完成
+2025-12-08 10:12:10,187 - httpx - INFO - HTTP Request: POST http://localhost:6333/collections/mem0migrations/points "HTTP/1.1 200 OK"
+2025-12-12 19:43:24,872 - httpx - INFO - HTTP Request: GET http://localhost:6333 "HTTP/1.1 502 Bad Gateway"
+2025-12-12 19:43:28,113 - httpx - INFO - HTTP Request: GET http://localhost:6333/collections "HTTP/1.1 502 Bad Gateway"
+2025-12-12 19:43:28,115 - core.memory_manager - ERROR - 记忆系统初始化失败: Unexpected Response: 502 (Bad Gateway)
+Raw response content:
+b''
+2025-12-12 19:43:28,117 - utils.helpers - CRITICAL - 应用程序初始化失败: Unexpected Response: 502 (Bad Gateway)
+Raw response content:
+b''
+2025-12-12 19:43:50,652 - httpx - INFO - HTTP Request: GET http://localhost:6333 "HTTP/1.1 200 OK"
+2025-12-12 19:43:50,680 - httpx - INFO - HTTP Request: GET http://localhost:6333/collections "HTTP/1.1 200 OK"
+2025-12-12 19:43:50,714 - httpx - INFO - HTTP Request: PUT http://localhost:6333/collections/mem0_multiagent/index?wait=true "HTTP/1.1 200 OK"
+2025-12-12 19:43:50,714 - mem0.vector_stores.qdrant - INFO - Created index for user_id in collection mem0_multiagent
+2025-12-12 19:43:50,737 - httpx - INFO - HTTP Request: PUT http://localhost:6333/collections/mem0_multiagent/index?wait=true "HTTP/1.1 200 OK"
+2025-12-12 19:43:50,737 - mem0.vector_stores.qdrant - INFO - Created index for agent_id in collection mem0_multiagent
+2025-12-12 19:43:50,753 - httpx - INFO - HTTP Request: PUT http://localhost:6333/collections/mem0_multiagent/index?wait=true "HTTP/1.1 200 OK"
+2025-12-12 19:43:50,753 - mem0.vector_stores.qdrant - INFO - Created index for run_id in collection mem0_multiagent
+2025-12-12 19:43:50,767 - httpx - INFO - HTTP Request: PUT http://localhost:6333/collections/mem0_multiagent/index?wait=true "HTTP/1.1 200 OK"
+2025-12-12 19:43:50,768 - mem0.vector_stores.qdrant - INFO - Created index for actor_id in collection mem0_multiagent
+2025-12-12 19:43:50,847 - httpx - INFO - HTTP Request: GET http://localhost:6333 "HTTP/1.1 200 OK"
+2025-12-12 19:43:50,862 - httpx - INFO - HTTP Request: GET http://localhost:6333/collections "HTTP/1.1 200 OK"
+2025-12-12 19:43:50,881 - httpx - INFO - HTTP Request: PUT http://localhost:6333/collections/mem0migrations/index?wait=true "HTTP/1.1 200 OK"
+2025-12-12 19:43:50,881 - mem0.vector_stores.qdrant - INFO - Created index for user_id in collection mem0migrations
+2025-12-12 19:43:50,898 - httpx - INFO - HTTP Request: PUT http://localhost:6333/collections/mem0migrations/index?wait=true "HTTP/1.1 200 OK"
+2025-12-12 19:43:50,898 - mem0.vector_stores.qdrant - INFO - Created index for agent_id in collection mem0migrations
+2025-12-12 19:43:50,908 - httpx - INFO - HTTP Request: PUT http://localhost:6333/collections/mem0migrations/index?wait=true "HTTP/1.1 200 OK"
+2025-12-12 19:43:50,908 - mem0.vector_stores.qdrant - INFO - Created index for run_id in collection mem0migrations
+2025-12-12 19:43:50,917 - httpx - INFO - HTTP Request: PUT http://localhost:6333/collections/mem0migrations/index?wait=true "HTTP/1.1 200 OK"
+2025-12-12 19:43:50,918 - mem0.vector_stores.qdrant - INFO - Created index for actor_id in collection mem0migrations
+2025-12-12 19:43:50,931 - httpx - INFO - HTTP Request: POST http://localhost:6333/collections/mem0migrations/points "HTTP/1.1 200 OK"
+2025-12-12 19:43:50,976 - core.memory_manager - INFO - 记忆管理器初始化成功
+2025-12-12 19:43:50,995 - core.chat_engine - INFO - 聊天引擎初始化成功
+2025-12-12 19:43:50,995 - utils.helpers - INFO - 聊天应用程序初始化完成
+2025-12-12 19:47:41,026 - httpx - INFO - HTTP Request: GET http://localhost:6333 "HTTP/1.1 200 OK"
+2025-12-12 19:47:41,059 - httpx - INFO - HTTP Request: GET http://localhost:6333/collections "HTTP/1.1 200 OK"
+2025-12-12 19:47:41,105 - httpx - INFO - HTTP Request: PUT http://localhost:6333/collections/mem0_multiagent/index?wait=true "HTTP/1.1 200 OK"
+2025-12-12 19:47:41,105 - mem0.vector_stores.qdrant - INFO - Created index for user_id in collection mem0_multiagent
+2025-12-12 19:47:41,119 - httpx - INFO - HTTP Request: PUT http://localhost:6333/collections/mem0_multiagent/index?wait=true "HTTP/1.1 200 OK"
+2025-12-12 19:47:41,119 - mem0.vector_stores.qdrant - INFO - Created index for agent_id in collection mem0_multiagent
+2025-12-12 19:47:41,135 - httpx - INFO - HTTP Request: PUT http://localhost:6333/collections/mem0_multiagent/index?wait=true "HTTP/1.1 200 OK"
+2025-12-12 19:47:41,135 - mem0.vector_stores.qdrant - INFO - Created index for run_id in collection mem0_multiagent
+2025-12-12 19:47:41,148 - httpx - INFO - HTTP Request: PUT http://localhost:6333/collections/mem0_multiagent/index?wait=true "HTTP/1.1 200 OK"
+2025-12-12 19:47:41,148 - mem0.vector_stores.qdrant - INFO - Created index for actor_id in collection mem0_multiagent
+2025-12-12 19:47:41,224 - httpx - INFO - HTTP Request: GET http://localhost:6333 "HTTP/1.1 200 OK"
+2025-12-12 19:47:41,240 - httpx - INFO - HTTP Request: GET http://localhost:6333/collections "HTTP/1.1 200 OK"
+2025-12-12 19:47:41,263 - httpx - INFO - HTTP Request: PUT http://localhost:6333/collections/mem0migrations/index?wait=true "HTTP/1.1 200 OK"
+2025-12-12 19:47:41,263 - mem0.vector_stores.qdrant - INFO - Created index for user_id in collection mem0migrations
+2025-12-12 19:47:41,276 - httpx - INFO - HTTP Request: PUT http://localhost:6333/collections/mem0migrations/index?wait=true "HTTP/1.1 200 OK"
+2025-12-12 19:47:41,277 - mem0.vector_stores.qdrant - INFO - Created index for agent_id in collection mem0migrations
+2025-12-12 19:47:41,290 - httpx - INFO - HTTP Request: PUT http://localhost:6333/collections/mem0migrations/index?wait=true "HTTP/1.1 200 OK"
+2025-12-12 19:47:41,290 - mem0.vector_stores.qdrant - INFO - Created index for run_id in collection mem0migrations
+2025-12-12 19:47:41,304 - httpx - INFO - HTTP Request: PUT http://localhost:6333/collections/mem0migrations/index?wait=true "HTTP/1.1 200 OK"
+2025-12-12 19:47:41,305 - mem0.vector_stores.qdrant - INFO - Created index for actor_id in collection mem0migrations
+2025-12-12 19:47:41,321 - httpx - INFO - HTTP Request: POST http://localhost:6333/collections/mem0migrations/points "HTTP/1.1 200 OK"
+2025-12-12 19:47:41,345 - core.memory_manager - INFO - 记忆管理器初始化成功
+2025-12-12 19:47:41,369 - core.chat_engine - INFO - 聊天引擎初始化成功
+2025-12-12 19:47:41,369 - utils.helpers - INFO - 聊天应用程序初始化完成
+2025-12-12 19:47:48,392 - httpx - INFO - HTTP Request: POST http://localhost:6333/collections/mem0migrations/points "HTTP/1.1 200 OK"
+2025-12-12 19:47:48,629 - httpx - INFO - HTTP Request: POST http://localhost:6333/collections/mem0_multiagent/points/query "HTTP/1.1 200 OK"
+2025-12-12 19:47:48,652 - httpx - INFO - HTTP Request: POST http://localhost:6333/collections/mem0migrations/points "HTTP/1.1 200 OK"
+2025-12-12 19:47:48,872 - httpx - INFO - HTTP Request: POST http://localhost:6333/collections/mem0_multiagent/points/query "HTTP/1.1 200 OK"
+2025-12-12 19:47:48,890 - httpx - INFO - HTTP Request: POST http://localhost:6333/collections/mem0migrations/points "HTTP/1.1 200 OK"
+2025-12-12 19:47:49,123 - httpx - INFO - HTTP Request: POST http://localhost:6333/collections/mem0_multiagent/points/query "HTTP/1.1 200 OK"
+2025-12-12 19:47:49,133 - httpx - INFO - HTTP Request: POST http://localhost:6333/collections/mem0migrations/points "HTTP/1.1 200 OK"
+2025-12-12 19:47:49,359 - httpx - INFO - HTTP Request: POST http://localhost:6333/collections/mem0_multiagent/points/query "HTTP/1.1 200 OK"
+2025-12-12 19:47:49,371 - httpx - INFO - HTTP Request: POST http://localhost:6333/collections/mem0migrations/points "HTTP/1.1 200 OK"
+2025-12-12 19:47:49,575 - httpx - INFO - HTTP Request: POST http://localhost:6333/collections/mem0_multiagent/points/query "HTTP/1.1 200 OK"
+2025-12-12 19:47:49,596 - httpx - INFO - HTTP Request: POST http://localhost:6333/collections/mem0migrations/points "HTTP/1.1 200 OK"
+2025-12-12 19:47:49,769 - httpx - INFO - HTTP Request: POST http://localhost:6333/collections/mem0_multiagent/points/query "HTTP/1.1 200 OK"
+2025-12-12 19:47:49,786 - httpx - INFO - HTTP Request: POST http://localhost:6333/collections/mem0migrations/points "HTTP/1.1 200 OK"
+2025-12-12 19:47:49,998 - httpx - INFO - HTTP Request: POST http://localhost:6333/collections/mem0_multiagent/points/query "HTTP/1.1 200 OK"
+2025-12-12 19:47:55,180 - httpx - INFO - HTTP Request: POST http://10.200.0.10:30491/v1/chat/completions "HTTP/1.1 502 Bad Gateway"
+2025-12-12 19:47:55,182 - openai._base_client - INFO - Retrying request to /chat/completions in 0.386197 seconds
+2025-12-12 19:48:00,600 - httpx - INFO - HTTP Request: POST http://10.200.0.10:30491/v1/chat/completions "HTTP/1.1 502 Bad Gateway"
+2025-12-12 19:48:00,602 - openai._base_client - INFO - Retrying request to /chat/completions in 0.891716 seconds
+2025-12-12 19:48:06,521 - httpx - INFO - HTTP Request: POST http://10.200.0.10:30491/v1/chat/completions "HTTP/1.1 502 Bad Gateway"
+2025-12-12 19:48:06,537 - core.memory_manager - WARNING - 记忆保存失败 (project_brain): 'role'
+2025-12-12 19:48:06,537 - core.memory_manager - ERROR - 备选方案也失败: 'role'
+2025-12-12 19:48:06,634 - httpx - INFO - HTTP Request: POST http://localhost:6333/collections/mem0migrations/points "HTTP/1.1 200 OK"
+2025-12-12 19:48:06,873 - httpx - INFO - HTTP Request: POST http://localhost:6333/collections/mem0_multiagent/points/query "HTTP/1.1 200 OK"
+2025-12-12 19:48:11,896 - httpx - INFO - HTTP Request: POST http://10.200.0.10:30491/v1/chat/completions "HTTP/1.1 502 Bad Gateway"
+2025-12-12 19:48:11,897 - openai._base_client - INFO - Retrying request to /chat/completions in 0.394145 seconds
+2025-12-12 19:48:17,331 - httpx - INFO - HTTP Request: POST http://10.200.0.10:30491/v1/chat/completions "HTTP/1.1 502 Bad Gateway"
+2025-12-12 19:48:17,332 - openai._base_client - INFO - Retrying request to /chat/completions in 0.962174 seconds
+2025-12-12 19:48:23,319 - httpx - INFO - HTTP Request: POST http://10.200.0.10:30491/v1/chat/completions "HTTP/1.1 502 Bad Gateway"
+2025-12-12 19:48:23,332 - core.memory_manager - WARNING - 记忆保存失败 (product_lead): 'role'
+2025-12-12 19:48:23,332 - core.memory_manager - ERROR - 备选方案也失败: 'role'
+2025-12-12 19:48:23,377 - httpx - INFO - HTTP Request: POST http://localhost:6333/collections/mem0migrations/points "HTTP/1.1 200 OK"
+2025-12-12 19:48:23,701 - httpx - INFO - HTTP Request: POST http://localhost:6333/collections/mem0_multiagent/points/query "HTTP/1.1 200 OK"
+2025-12-12 19:48:28,753 - httpx - INFO - HTTP Request: POST http://10.200.0.10:30491/v1/chat/completions "HTTP/1.1 502 Bad Gateway"
+2025-12-12 19:48:28,757 - openai._base_client - INFO - Retrying request to /chat/completions in 0.377491 seconds
+2025-12-12 19:48:34,153 - httpx - INFO - HTTP Request: POST http://10.200.0.10:30491/v1/chat/completions "HTTP/1.1 502 Bad Gateway"
+2025-12-12 19:48:34,157 - openai._base_client - INFO - Retrying request to /chat/completions in 0.822491 seconds
+2025-12-12 19:48:40,004 - httpx - INFO - HTTP Request: POST http://10.200.0.10:30491/v1/chat/completions "HTTP/1.1 502 Bad Gateway"
+2025-12-12 19:48:40,007 - core.memory_manager - WARNING - 记忆保存失败 (solution_architect): 'role'
+2025-12-12 19:48:40,007 - core.memory_manager - ERROR - 备选方案也失败: 'role'
+2025-12-12 19:48:40,032 - httpx - INFO - HTTP Request: POST http://localhost:6333/collections/mem0migrations/points "HTTP/1.1 200 OK"
+2025-12-12 19:48:40,227 - httpx - INFO - HTTP Request: POST http://localhost:6333/collections/mem0_multiagent/points/query "HTTP/1.1 200 OK"
+2025-12-12 19:48:40,242 - httpx - INFO - HTTP Request: POST http://localhost:6333/collections/mem0migrations/points "HTTP/1.1 200 OK"
+2025-12-12 19:48:40,423 - httpx - INFO - HTTP Request: POST http://localhost:6333/collections/mem0_multiagent/points/query "HTTP/1.1 200 OK"
+2025-12-12 19:48:40,440 - httpx - INFO - HTTP Request: POST http://localhost:6333/collections/mem0migrations/points "HTTP/1.1 200 OK"
+2025-12-12 19:48:40,623 - httpx - INFO - HTTP Request: POST http://localhost:6333/collections/mem0_multiagent/points/query "HTTP/1.1 200 OK"
+2025-12-12 19:48:40,652 - httpx - INFO - HTTP Request: POST http://localhost:6333/collections/mem0migrations/points "HTTP/1.1 200 OK"
+2025-12-12 19:48:40,822 - httpx - INFO - HTTP Request: POST http://localhost:6333/collections/mem0_multiagent/points/query "HTTP/1.1 200 OK"
+2025-12-12 19:48:40,848 - httpx - INFO - HTTP Request: POST http://localhost:6333/collections/mem0migrations/points "HTTP/1.1 200 OK"
+2025-12-12 19:48:41,058 - httpx - INFO - HTTP Request: POST http://localhost:6333/collections/mem0_multiagent/points/query "HTTP/1.1 200 OK"
+2025-12-12 19:48:41,072 - httpx - INFO - HTTP Request: POST http://localhost:6333/collections/mem0migrations/points "HTTP/1.1 200 OK"
+2025-12-12 19:48:41,242 - httpx - INFO - HTTP Request: POST http://localhost:6333/collections/mem0_multiagent/points/query "HTTP/1.1 200 OK"
+2025-12-12 19:48:41,261 - httpx - INFO - HTTP Request: POST http://localhost:6333/collections/mem0migrations/points "HTTP/1.1 200 OK"
+2025-12-12 19:48:41,423 - httpx - INFO - HTTP Request: POST http://localhost:6333/collections/mem0_multiagent/points/query "HTTP/1.1 200 OK"
+2025-12-12 19:48:46,443 - httpx - INFO - HTTP Request: POST http://10.200.0.10:30491/v1/chat/completions "HTTP/1.1 502 Bad Gateway"
+2025-12-12 19:48:46,445 - openai._base_client - INFO - Retrying request to /chat/completions in 0.450567 seconds
+2025-12-12 19:48:51,922 - httpx - INFO - HTTP Request: POST http://10.200.0.10:30491/v1/chat/completions "HTTP/1.1 502 Bad Gateway"
+2025-12-12 19:48:51,924 - openai._base_client - INFO - Retrying request to /chat/completions in 0.834025 seconds
+2025-12-12 19:48:57,823 - httpx - INFO - HTTP Request: POST http://10.200.0.10:30491/v1/chat/completions "HTTP/1.1 502 Bad Gateway"
+2025-12-12 19:48:57,827 - core.memory_manager - WARNING - 记忆保存失败 (project_brain): 'role'
+2025-12-12 19:48:57,827 - core.memory_manager - ERROR - 备选方案也失败: 'role'
+2025-12-12 19:56:22,941 - httpx - INFO - HTTP Request: POST http://localhost:6333/collections/mem0migrations/points "HTTP/1.1 200 OK"
+2025-12-12 19:56:23,195 - httpx - INFO - HTTP Request: POST http://localhost:6333/collections/mem0_multiagent/points/query "HTTP/1.1 200 OK"
+2025-12-12 19:56:23,223 - httpx - INFO - HTTP Request: POST http://localhost:6333/collections/mem0migrations/points "HTTP/1.1 200 OK"
+2025-12-12 19:56:23,466 - httpx - INFO - HTTP Request: POST http://localhost:6333/collections/mem0_multiagent/points/query "HTTP/1.1 200 OK"
+2025-12-12 19:56:23,488 - httpx - INFO - HTTP Request: POST http://localhost:6333/collections/mem0migrations/points "HTTP/1.1 200 OK"
+2025-12-12 19:56:23,665 - httpx - INFO - HTTP Request: POST http://localhost:6333/collections/mem0_multiagent/points/query "HTTP/1.1 200 OK"
+2025-12-12 19:56:23,683 - httpx - INFO - HTTP Request: POST http://localhost:6333/collections/mem0migrations/points "HTTP/1.1 200 OK"
+2025-12-12 19:56:23,885 - httpx - INFO - HTTP Request: POST http://localhost:6333/collections/mem0_multiagent/points/query "HTTP/1.1 200 OK"
+2025-12-12 19:56:23,899 - httpx - INFO - HTTP Request: POST http://localhost:6333/collections/mem0migrations/points "HTTP/1.1 200 OK"
+2025-12-12 19:56:24,125 - httpx - INFO - HTTP Request: POST http://localhost:6333/collections/mem0_multiagent/points/query "HTTP/1.1 200 OK"
+2025-12-12 19:56:24,151 - httpx - INFO - HTTP Request: POST http://localhost:6333/collections/mem0migrations/points "HTTP/1.1 200 OK"
+2025-12-12 19:56:24,391 - httpx - INFO - HTTP Request: POST http://localhost:6333/collections/mem0_multiagent/points/query "HTTP/1.1 200 OK"
+2025-12-12 19:56:24,414 - httpx - INFO - HTTP Request: POST http://localhost:6333/collections/mem0migrations/points "HTTP/1.1 200 OK"
+2025-12-12 19:56:24,591 - httpx - INFO - HTTP Request: POST http://localhost:6333/collections/mem0_multiagent/points/query "HTTP/1.1 200 OK"
+2025-12-12 19:56:29,617 - httpx - INFO - HTTP Request: POST http://10.200.0.10:30491/v1/chat/completions "HTTP/1.1 502 Bad Gateway"
+2025-12-12 19:56:29,619 - openai._base_client - INFO - Retrying request to /chat/completions in 0.471571 seconds
+2025-12-12 19:56:35,115 - httpx - INFO - HTTP Request: POST http://10.200.0.10:30491/v1/chat/completions "HTTP/1.1 502 Bad Gateway"
+2025-12-12 19:56:35,119 - openai._base_client - INFO - Retrying request to /chat/completions in 0.795975 seconds
+2025-12-12 19:56:40,939 - httpx - INFO - HTTP Request: POST http://10.200.0.10:30491/v1/chat/completions "HTTP/1.1 502 Bad Gateway"
+2025-12-12 19:56:40,946 - core.memory_manager - WARNING - 记忆保存失败 (project_brain): 'role'
+2025-12-12 19:56:40,947 - core.memory_manager - ERROR - 备选方案也失败: 'role'
+2025-12-12 19:56:40,985 - httpx - INFO - HTTP Request: POST http://localhost:6333/collections/mem0migrations/points "HTTP/1.1 200 OK"
+2025-12-12 19:56:41,254 - httpx - INFO - HTTP Request: POST http://localhost:6333/collections/mem0_multiagent/points/query "HTTP/1.1 200 OK"
+2025-12-16 16:19:29,087 - httpx - INFO - HTTP Request: GET http://localhost:6333 "HTTP/1.1 502 Bad Gateway"
+2025-12-16 16:19:32,129 - httpx - INFO - HTTP Request: GET http://localhost:6333/collections "HTTP/1.1 502 Bad Gateway"
+2025-12-16 16:19:32,132 - core.memory_manager - ERROR - 记忆系统初始化失败: Unexpected Response: 502 (Bad Gateway)
+Raw response content:
+b''
+2025-12-16 16:19:32,132 - utils.helpers - CRITICAL - 应用程序初始化失败: Unexpected Response: 502 (Bad Gateway)
+Raw response content:
+b''
+2025-12-16 16:20:03,027 - httpx - INFO - HTTP Request: GET http://localhost:6333 "HTTP/1.1 200 OK"
+2025-12-16 16:20:03,037 - httpx - INFO - HTTP Request: GET http://localhost:6333/collections "HTTP/1.1 200 OK"
+2025-12-16 16:20:03,078 - httpx - INFO - HTTP Request: PUT http://localhost:6333/collections/mem0_multiagent/index?wait=true "HTTP/1.1 200 OK"
+2025-12-16 16:20:03,079 - mem0.vector_stores.qdrant - INFO - Created index for user_id in collection mem0_multiagent
+2025-12-16 16:20:03,101 - httpx - INFO - HTTP Request: PUT http://localhost:6333/collections/mem0_multiagent/index?wait=true "HTTP/1.1 200 OK"
+2025-12-16 16:20:03,101 - mem0.vector_stores.qdrant - INFO - Created index for agent_id in collection mem0_multiagent
+2025-12-16 16:20:03,108 - httpx - INFO - HTTP Request: PUT http://localhost:6333/collections/mem0_multiagent/index?wait=true "HTTP/1.1 200 OK"
+2025-12-16 16:20:03,108 - mem0.vector_stores.qdrant - INFO - Created index for run_id in collection mem0_multiagent
+2025-12-16 16:20:03,117 - httpx - INFO - HTTP Request: PUT http://localhost:6333/collections/mem0_multiagent/index?wait=true "HTTP/1.1 200 OK"
+2025-12-16 16:20:03,117 - mem0.vector_stores.qdrant - INFO - Created index for actor_id in collection mem0_multiagent
+2025-12-16 16:20:03,188 - httpx - INFO - HTTP Request: GET http://localhost:6333 "HTTP/1.1 200 OK"
+2025-12-16 16:20:03,197 - httpx - INFO - HTTP Request: GET http://localhost:6333/collections "HTTP/1.1 200 OK"
+2025-12-16 16:20:03,210 - httpx - INFO - HTTP Request: PUT http://localhost:6333/collections/mem0migrations/index?wait=true "HTTP/1.1 200 OK"
+2025-12-16 16:20:03,210 - mem0.vector_stores.qdrant - INFO - Created index for user_id in collection mem0migrations
+2025-12-16 16:20:03,222 - httpx - INFO - HTTP Request: PUT http://localhost:6333/collections/mem0migrations/index?wait=true "HTTP/1.1 200 OK"
+2025-12-16 16:20:03,222 - mem0.vector_stores.qdrant - INFO - Created index for agent_id in collection mem0migrations
+2025-12-16 16:20:03,231 - httpx - INFO - HTTP Request: PUT http://localhost:6333/collections/mem0migrations/index?wait=true "HTTP/1.1 200 OK"
+2025-12-16 16:20:03,231 - mem0.vector_stores.qdrant - INFO - Created index for run_id in collection mem0migrations
+2025-12-16 16:20:03,243 - httpx - INFO - HTTP Request: PUT http://localhost:6333/collections/mem0migrations/index?wait=true "HTTP/1.1 200 OK"
+2025-12-16 16:20:03,243 - mem0.vector_stores.qdrant - INFO - Created index for actor_id in collection mem0migrations
+2025-12-16 16:20:03,255 - httpx - INFO - HTTP Request: POST http://localhost:6333/collections/mem0migrations/points "HTTP/1.1 200 OK"
+2025-12-16 16:20:03,281 - core.memory_manager - INFO - 记忆管理器初始化成功
+2025-12-16 16:20:03,299 - core.chat_engine - INFO - 聊天引擎初始化成功
+2025-12-16 16:20:03,300 - utils.helpers - INFO - 聊天应用程序初始化完成
+2025-12-16 16:20:09,216 - httpx - INFO - HTTP Request: POST http://localhost:6333/collections/mem0migrations/points "HTTP/1.1 200 OK"
+2025-12-16 16:20:14,227 - core.memory_manager - ERROR - 记忆搜索失败: 502 Server Error: Bad Gateway for url: http://10.200.4.8:30292/api/v1/embeddings
+2025-12-16 16:20:14,244 - httpx - INFO - HTTP Request: POST http://localhost:6333/collections/mem0migrations/points "HTTP/1.1 200 OK"
+2025-12-16 16:20:19,261 - core.memory_manager - ERROR - 备选搜索也失败: 502 Server Error: Bad Gateway for url: http://10.200.4.8:30292/api/v1/embeddings
+2025-12-16 16:20:19,305 - httpx - INFO - HTTP Request: POST http://localhost:6333/collections/mem0migrations/points "HTTP/1.1 200 OK"
+2025-12-16 16:20:24,318 - core.memory_manager - ERROR - 记忆搜索失败: 502 Server Error: Bad Gateway for url: http://10.200.4.8:30292/api/v1/embeddings
+2025-12-16 16:20:24,329 - httpx - INFO - HTTP Request: POST http://localhost:6333/collections/mem0migrations/points "HTTP/1.1 200 OK"
+2025-12-16 16:20:29,340 - core.memory_manager - ERROR - 备选搜索也失败: 502 Server Error: Bad Gateway for url: http://10.200.4.8:30292/api/v1/embeddings
+2025-12-16 16:20:29,367 - httpx - INFO - HTTP Request: POST http://localhost:6333/collections/mem0migrations/points "HTTP/1.1 200 OK"
+2025-12-16 16:20:34,387 - core.memory_manager - ERROR - 记忆搜索失败: 502 Server Error: Bad Gateway for url: http://10.200.4.8:30292/api/v1/embeddings
+2025-12-16 16:20:34,410 - httpx - INFO - HTTP Request: POST http://localhost:6333/collections/mem0migrations/points "HTTP/1.1 200 OK"

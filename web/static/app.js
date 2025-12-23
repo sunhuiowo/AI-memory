@@ -1,47 +1,78 @@
-// DOM Elements
+// DOM元素和全局函数定义
 // 全局定义updateResponseTime函数，避免任何地方调用时出错
+/**
+ * 全局响应时间更新函数（已禁用）
+ * 
+ * 此函数故意留空，以避免JavaScript错误
+ */
 function updateResponseTime() {
   console.log('全局updateResponseTime函数被调用，但已被禁用');
-  // 此函数故意留空，以避免JavaScript错误
 }
 
 // 全局变量定义
+/** 聊天表单元素 */
 const form = document.getElementById("chat-form");
+/** 聊天记录显示区域 */
 const chatLog = document.getElementById("chat-log");
+/** 项目摘要显示区域 */
 const projectSummary = document.getElementById("project-summary");
+/** 专家列表显示区域 */
 const specialistList = document.getElementById("specialist-list");
+/** 记忆使用情况显示区域 */
 const memoryUsage = document.getElementById("memory-usage");
+/** 协作者显示区域 */
 const collaborators = document.getElementById("collaborators");
+/** 状态指示器 */
 const statusIndicator = document.getElementById("status-indicator");
+/** 延迟标签 */
 const latencyLabel = document.getElementById("latency-label");
 // 确保responseTime变量有一个默认值，避免引用错误
 const responseTime = latencyLabel || { textContent: '', style: {} };
+/** 清除按钮 */
 const clearButton = document.getElementById("btn-clear");
+/** 消息输入框 */
 const messageInput = document.querySelector("textarea[name='message']");
+/** 用户ID输入框 */
 const userIdInput = document.querySelector("input[name='user_id']");
+/** 会话ID输入框 */
 const sessionIdInput = document.querySelector("input[name='session_id']");
 
-// Enhanced state management
+// 增强的状态管理
+/**
+ * 应用状态管理对象
+ * 
+ * 用于管理应用的全局状态，包括聊天历史、加载状态等
+ */
 const state = {
-  history: [],
-  isLoading: false,
-  lastInteractionTime: null,
-  conversationStats: {
-    messages: 0,
-    responseTime: 0
+  history: [],                    // 聊天历史记录
+  isLoading: false,               // 是否正在加载
+  lastInteractionTime: null,      // 最后交互时间
+  conversationStats: {            // 会话统计信息
+    messages: 0,                  // 消息数量
+    responseTime: 0               // 响应时间
   }
 };
 
-// Add toast notification container
+// 添加toast通知容器
+/**
+ * 创建并添加toast通知容器
+ * 
+ * 用于显示临时通知消息
+ */
 const toastContainer = document.createElement('div');
 toastContainer.className = 'toast-container';
 document.body.appendChild(toastContainer);
 
-// Set status indicator with animations
+/**
+ * 设置状态指示器
+ * 
+ * @param {string} text - 状态文本
+ * @param {string} variant - 状态变体（idle、busy、error）
+ */
 function setStatus(text, variant = "idle") {
-  // Add transition effect
+  // 添加过渡效果
   statusIndicator.classList.remove('status-transition');
-  void statusIndicator.offsetWidth; // Force reflow
+  void statusIndicator.offsetWidth; // 强制重排以触发过渡
   statusIndicator.classList.add('status-transition');
   
   statusIndicator.textContent = text;
@@ -50,14 +81,14 @@ function setStatus(text, variant = "idle") {
   
   if (variant === "busy") {
     statusIndicator.classList.add("busy");
-    // Add pulsing animation
+    // 添加脉冲动画
     if (!statusIndicator.querySelector('.pulse-dot')) {
       const dot = document.createElement('span');
       dot.className = 'pulse-dot';
       statusIndicator.prepend(dot);
     }
   } else {
-    // Remove pulse dot for non-busy states
+    // 移除非忙碌状态的脉冲点
     const dot = statusIndicator.querySelector('.pulse-dot');
     if (dot) dot.remove();
   }
@@ -65,7 +96,12 @@ function setStatus(text, variant = "idle") {
   if (variant === "error") statusIndicator.classList.add("error");
 }
 
-// Show toast notification
+/**
+ * 显示toast通知
+ * 
+ * @param {string} message - 通知消息
+ * @param {string} type - 通知类型（info、success、error）
+ */
 function showToast(message, type = 'info') {
   const toast = document.createElement('div');
   toast.className = `toast-notification toast-${type}`;
@@ -73,13 +109,13 @@ function showToast(message, type = 'info') {
   
   toastContainer.appendChild(toast);
   
-  // Animate in
+  // 显示动画
   setTimeout(() => {
     toast.style.opacity = '1';
     toast.style.transform = 'translateY(0)';
   }, 10);
   
-  // Auto remove after delay
+  // 延迟后自动移除
   setTimeout(() => {
     toast.style.opacity = '0';
     toast.style.transform = 'translateY(-20px)';
@@ -87,7 +123,12 @@ function showToast(message, type = 'info') {
   }, 3000);
 }
 
-// Format time with relative formatting
+/**
+ * 格式化相对时间
+ * 
+ * @param {number} timestamp - 时间戳
+ * @returns {string} 格式化后的相对时间
+ */
 function formatRelativeTime(timestamp) {
   const now = Date.now();
   const diff = now - timestamp;
@@ -99,7 +140,13 @@ function formatRelativeTime(timestamp) {
   return new Date(timestamp).toLocaleDateString();
 }
 
-// Progressive typing animation
+/**
+ * 渐进式打字动画
+ * 
+ * @param {HTMLElement} element - 目标元素
+ * @param {string} text - 要显示的文本
+ * @param {number} speed - 打字速度（毫秒/字符）
+ */
 function progressiveType(element, text, speed = 20) {
   let index = 0;
   
@@ -107,7 +154,7 @@ function progressiveType(element, text, speed = 20) {
     if (index < text.length) {
       element.textContent += text.charAt(index);
       index++;
-      scrollToBottom(); // Scroll as typing happens
+      scrollToBottom(); // 打字时自动滚动到底部
       setTimeout(typeNextChar, speed);
     }
   }
@@ -115,7 +162,9 @@ function progressiveType(element, text, speed = 20) {
   typeNextChar();
 }
 
-// Scroll to bottom with smooth animation
+/**
+ * 平滑滚动到底部
+ */
 function scrollToBottom() {
   chatLog.scrollTo({
     top: chatLog.scrollHeight,
@@ -123,7 +172,11 @@ function scrollToBottom() {
   });
 }
 
-// Create a typing indicator
+/**
+ * 创建打字指示器
+ * 
+ * @returns {HTMLElement} 打字指示器元素
+ */
 function createTypingIndicator() {
   const item = document.createElement("li");
   item.id = 'typing-indicator';
@@ -133,7 +186,7 @@ function createTypingIndicator() {
   const body = document.createElement("p");
   body.className = 'typing-animation';
   
-  // Create typing dots
+  // 创建打字点
   for (let i = 0; i < 3; i++) {
     const dot = document.createElement('span');
     dot.className = `typing-dot dot-${i+1}`;
@@ -145,14 +198,16 @@ function createTypingIndicator() {
   return item;
 }
 
-// Render messages with animations and typing effects
+/**
+ * 渲染消息（带动画和打字效果）
+ */
 function renderMessages() {
-  // Skip re-rendering if there's a typing indicator
+  // 如果有打字指示器，跳过重新渲染
   if (document.getElementById('typing-indicator')) return;
   
-  // Only render new messages
+  // 只渲染新消息
   state.history.forEach((entry, index) => {
-    // Skip if already rendered
+    // 如果已渲染，跳过
     if (document.querySelector(`[data-message-id="${index}"]`)) return;
     
     const item = document.createElement("li");
@@ -166,13 +221,13 @@ function renderMessages() {
     
     const body = document.createElement("p");
     
-    // Add timestamp
+    // 添加时间戳
     const timestamp = document.createElement("span");
     timestamp.className = 'message-timestamp';
     timestamp.textContent = formatRelativeTime(entry.timestamp || Date.now());
     header.appendChild(timestamp);
     
-    // Add progressive typing for the latest assistant message
+    // 为最新的助手消息添加渐进式打字效果
     if (entry.role === 'assistant' && index === state.history.length - 1) {
       body.textContent = '';
       progressiveType(body, entry.content);
@@ -184,7 +239,7 @@ function renderMessages() {
     item.appendChild(body);
     chatLog.appendChild(item);
     
-    // Animate appearance with staggered delay
+    // 添加交错延迟动画效果
     setTimeout(() => {
       item.style.opacity = '1';
       item.style.transform = 'translateY(0)';
@@ -195,8 +250,11 @@ function renderMessages() {
   scrollToBottom();
 }
 
-// Render insights with animations
-// 为项目大脑摘要和专家大脑反馈添加动态折叠/展开功能
+/**
+ * 为项目大脑摘要和专家大脑反馈添加动态折叠/展开功能
+ * 
+ * @param {HTMLElement} element - 要添加折叠/展开功能的元素
+ */
 function makeCollapsible(element) {
   if (!element) return;
   
@@ -341,7 +399,14 @@ function renderInsights(result) {
   }, 300);
 }
 
-// Enhanced sendMessage with loading states and error handling
+/**
+ * 发送消息到API并获取响应
+ * 
+ * @param {string} message - 消息内容
+ * @param {string} userId - 用户ID
+ * @param {string} sessionId - 会话ID
+ * @returns {Promise<object>} API响应数据
+ */
 async function sendMessage(message, userId, sessionId) {
   // 获取当前选择的聊天模式和目标专家
   const chatMode = document.querySelector('input[name="chatMode"]:checked')?.value;
@@ -402,7 +467,13 @@ async function sendMessage(message, userId, sessionId) {
   }
 }
 
-// Enhanced appendHistory with timestamp and limits
+/**
+ * 添加消息到历史记录
+ * 
+ * @param {string} role - 角色（user或assistant）
+ * @param {string} label - 标签（显示在消息头部）
+ * @param {string} content - 消息内容
+ */
 function appendHistory(role, label, content) {
   const message = {
     role,
@@ -430,7 +501,9 @@ function appendHistory(role, label, content) {
   renderMessages();
 }
 
-// Form submission with enhanced UX
+/**
+ * 表单提交处理（增强用户体验）
+ */
 form?.addEventListener("submit", async (event) => {
   event.preventDefault();
   
@@ -519,7 +592,9 @@ form?.addEventListener("submit", async (event) => {
   }
 });
 
-// Enhanced clear button with confirmation and animation
+/**
+ * 清除按钮点击事件处理（带确认和动画）
+ */
 clearButton?.addEventListener("click", () => {
   // Confirm before clearing
   if (confirm('确定要清除对话历史吗？')) {
@@ -551,7 +626,9 @@ clearButton?.addEventListener("click", () => {
   }
 });
 
-// Add keyboard shortcuts
+/**
+ * 设置键盘快捷键
+ */
 function setupKeyboardShortcuts() {
   document.addEventListener('keydown', (e) => {
     // Ctrl/Cmd + Enter to send message
@@ -577,7 +654,9 @@ function setupKeyboardShortcuts() {
   });
 }
 
-// Add idle state handling
+/**
+ * 设置空闲状态处理
+ */
 function setupIdleState() {
   setInterval(() => {
     if (!state.isLoading && state.lastInteractionTime) {
@@ -590,7 +669,9 @@ function setupIdleState() {
   }, 30000); // Check every 30 seconds
 }
 
-// Load saved history if available
+/**
+ * 加载保存的历史记录（如果可用）
+ */
 function loadSavedHistory() {
   try {
     const saved = localStorage.getItem('chat_history');

@@ -2,38 +2,77 @@
 # -*- coding: utf-8 -*-
 """
 多代理协作控制器：负责项目大脑与专家大脑的编排。
+
+该模块实现了一个智能代理选择和协作系统，能够：
+1. 根据用户输入自动选择合适的专家代理
+2. 支持直接调用特定专家或通过项目大脑整合流程
+3. 管理项目记忆和专家记忆的上下文
+4. 协调多代理工作流并生成最终响应
 """
 
 from typing import Dict, List, Optional, Any
 
+# 导入配置模块
 from config.settings import Config
+# 导入聊天引擎
 from core.chat_engine import ChatEngine
+# 导入数据模型
 from models.data_models import MultiAgentResult, SpecialistResult, ChatResponse
 
 
 class AgentSelector:
-    """基于关键词打分的简单专家路由器。"""
+    """基于关键词打分的简单专家路由器。
+    
+    该类负责根据用户输入的关键词匹配，从专家列表中选择最合适的专家代理。
+    """
     
     def __init__(self, agent_profiles: Dict[str, Dict]):
+        """初始化专家选择器。
+        
+        Args:
+            agent_profiles: 所有代理的配置文件，包含专家的专业领域关键词等信息
+        """
+        # 存储所有代理配置
         self.agent_profiles = agent_profiles
+        # 获取多代理流水线配置
         pipeline_conf = Config.MULTI_AGENT_PIPELINE
+        # 设置最大选择专家数量，默认3个
         self.max_specialists = pipeline_conf.get("max_specialists", 3)
+        # 设置备选专家列表，当没有匹配到专家时使用
         self.fallback_specialists = pipeline_conf.get("fallback_specialists", [])
     
     def select_specialists(self, message: str) -> List[str]:
-        """根据用户输入选择合适的专家代理。"""
+        """根据用户输入选择合适的专家代理。
+        
+        Args:
+            message: 用户输入的消息内容
+            
+        Returns:
+            选中的专家代理ID列表，按匹配度降序排列
+        """
+        # 将用户消息转换为小写以便匹配
         lowered = message.lower()
+        # 存储专家ID和对应的匹配分数
         scored: List[tuple[str, int]] = []
+        
+        # 遍历所有代理配置
         for agent_id, profile in self.agent_profiles.items():
+            # 只处理类型为specialist的代理
             if profile.get("type") != "specialist":
                 continue
+            # 获取专家的专业领域关键词
             keywords = profile.get("expertise_keywords", [])
+            # 计算消息中包含的关键词数量作为匹配分数
             score = sum(lowered.count(keyword.lower()) for keyword in keywords)
+            # 添加到分数列表
             scored.append((agent_id, score))
         
+        # 按分数降序排序
         scored.sort(key=lambda item: item[1], reverse=True)
+        # 选择分数大于0的专家，并限制最大数量
         selected = [agent_id for agent_id, score in scored if score > 0][: self.max_specialists]
         
+        # 如果没有匹配到专家，使用备选专家列表
         if not selected:
             selected = self.fallback_specialists[: self.max_specialists]
         
@@ -41,11 +80,26 @@ class AgentSelector:
 
 
 class MultiAgentController:
-    """封装 AI 项目管理流程，负责驱动项目大脑 + 专家大脑。"""
+    """封装 AI 项目管理流程，负责驱动项目大脑 + 专家大脑。
+    
+    该类是多代理系统的核心控制器，负责：
+    1. 处理用户请求，决定调用模式（直接专家调用或项目大脑整合）
+    2. 管理项目记忆和专家记忆的上下文获取
+    3. 构建不同代理的提示信息
+    4. 调用代理生成响应并整合结果
+    """
     
     def __init__(self, chat_engine: ChatEngine):
+        """初始化多代理控制器。
+        
+        Args:
+            chat_engine: 聊天引擎实例，用于与AI代理交互
+        """
+        # 存储聊天引擎实例
         self.chat_engine = chat_engine
+        # 初始化专家选择器
         self.selector = AgentSelector(Config.AGENT_PROFILES)
+        # 获取项目大脑的代理ID
         self.project_brain_id = Config.PROJECT_BRAIN_ID
     
     def process_user_message(
@@ -55,9 +109,20 @@ class MultiAgentController:
         session_id: str,
         target_agent: Optional[str] = None
     ) -> MultiAgentResult:
-        """执行消息处理流程，支持直接调用特定专家大脑或使用项目大脑整合流程。"""
+        """执行消息处理流程，支持直接调用特定专家大脑或使用项目大脑整合流程。
+        
+        Args:
+            user_message: 用户输入的消息内容
+            user_id: 用户ID，用于标识不同用户
+            session_id: 会话ID，用于标识不同的会话上下文
+            target_agent: 目标代理ID，可选参数，指定要直接调用的代理
+            
+        Returns:
+            MultiAgentResult对象，包含项目摘要、选中的代理、专家输出和最终响应
+        """
         # 直接调用专家大脑模式
         if target_agent and target_agent != self.project_brain_id and target_agent in Config.AGENT_PROFILES:
+            """直接调用专家大脑模式：当指定了具体的专家代理时使用"""
             # 获取专家特定的记忆上下文
             extra_context = self._get_expert_memory_context(user_id, target_agent)
             
@@ -66,95 +131,132 @@ class MultiAgentController:
             
             # 调用专家代理
             response = self._call_agent(
-                agent_id=target_agent,
-                prompt=prompt,
-                user_id=user_id,
-                session_id=session_id,
-                persist_history=True,
-                extra_context=extra_context,
-                memory_type="expert"  # 指定为专家记忆
+                agent_id=target_agent,          # 专家代理ID
+                prompt=prompt,                  # 构建的提示信息
+                user_id=user_id,                # 用户ID
+                session_id=session_id,          # 会话ID
+                persist_history=True,           # 持久化对话历史
+                extra_context=extra_context,    # 专家特定的记忆上下文
+                memory_type="expert"           # 指定为专家记忆类型
             )
             
             # 包装为MultiAgentResult以保持接口一致性
             return MultiAgentResult(
-                project_summary="",
-                selected_agents=[target_agent],
-                specialist_outputs=[SpecialistResult(agent_id=target_agent, content=response.content)],
-                final_response=response
+                project_summary="",                                    # 直接调用模式下没有项目摘要
+                selected_agents=[target_agent],                        # 选中的代理列表
+                specialist_outputs=[SpecialistResult(agent_id=target_agent, content=response.content)],  # 专家输出
+                final_response=response                                # 最终响应
             )
         
         # 默认使用项目大脑整合流程
+        """项目大脑整合流程：默认模式，通过项目大脑协调多个专家"""
         # 获取项目记忆上下文
         project_memory_context = self._get_project_memory_context(user_id, self.project_brain_id)
         
+        # 调用项目大脑生成项目摘要
         project_summary_resp = self._call_agent(
-            agent_id=self.project_brain_id,
-            prompt=self._build_project_brain_prompt(user_message),
-            user_id=user_id,
-            session_id=session_id,
-            persist_history=False,
-            extra_context=project_memory_context,
-            memory_type="project"
+            agent_id=self.project_brain_id,                          # 项目大脑代理ID
+            prompt=self._build_project_brain_prompt(user_message),   # 项目大脑提示信息
+            user_id=user_id,                                        # 用户ID
+            session_id=session_id,                                  # 会话ID
+            persist_history=False,                                   # 不持久化此中间结果
+            extra_context=project_memory_context,                   # 项目记忆上下文
+            memory_type="project"                                  # 指定为项目记忆类型
         )
+        # 提取项目摘要内容
         project_summary = project_summary_resp.content
         
+        # 选择合适的专家代理
         specialist_ids = self.selector.select_specialists(user_message)
+        # 存储专家输出结果
         specialist_outputs: List[SpecialistResult] = []
+        
+        # 遍历选中的专家代理
         for agent_id in specialist_ids:
             # 获取专家特定的记忆上下文
             expert_memory_context = self._get_expert_memory_context(user_id, agent_id)
             
+            # 调用专家代理
             specialist_resp = self._call_agent(
-                agent_id=agent_id,
-                prompt=self._build_specialist_prompt(agent_id, user_message, project_summary),
-                user_id=user_id,
-                session_id=session_id,
-                persist_history=False,
-                extra_context=f"{project_summary}\n{expert_memory_context}",
-                memory_type="expert"
+                agent_id=agent_id,                                          # 专家代理ID
+                prompt=self._build_specialist_prompt(agent_id, user_message, project_summary),  # 专家提示信息
+                user_id=user_id,                                            # 用户ID
+                session_id=session_id,                                      # 会话ID
+                persist_history=False,                                       # 不持久化此中间结果
+                extra_context=f"{project_summary}\n{expert_memory_context}",  # 结合项目摘要和专家记忆上下文
+                memory_type="expert"                                       # 指定为专家记忆类型
             )
+            # 添加专家输出到结果列表
             specialist_outputs.append(SpecialistResult(agent_id=agent_id, content=specialist_resp.content))
         
+        # 构建最终整合提示
         final_prompt = self._build_final_prompt(user_message, project_summary, specialist_outputs)
+        # 调用项目大脑整合所有专家意见生成最终响应
         final_response = self._call_agent(
-            agent_id=self.project_brain_id,
-            prompt=final_prompt,
-            user_id=user_id,
-            session_id=session_id,
-            persist_history=True,
-            extra_context=f"{project_summary}\n{project_memory_context}",
-            memory_type="project"
+            agent_id=self.project_brain_id,                              # 项目大脑代理ID
+            prompt=final_prompt,                                         # 最终整合提示
+            user_id=user_id,                                            # 用户ID
+            session_id=session_id,                                      # 会话ID
+            persist_history=True,                                       # 持久化最终对话历史
+            extra_context=f"{project_summary}\n{project_memory_context}",  # 结合项目摘要和项目记忆上下文
+            memory_type="project"                                      # 指定为项目记忆类型
         )
         
+        # 返回完整的多代理结果
         return MultiAgentResult(
-            project_summary=project_summary,
-            selected_agents=specialist_ids,
-            specialist_outputs=specialist_outputs,
-            final_response=final_response
+            project_summary=project_summary,        # 项目摘要
+            selected_agents=specialist_ids,         # 选中的专家代理列表
+            specialist_outputs=specialist_outputs,  # 所有专家的输出结果
+            final_response=final_response           # 最终整合响应
         )
     
     def get_available_agents(self) -> Dict[str, Dict[str, Any]]:
-        """获取所有可用的专家代理信息。"""
+        """获取所有可用的专家代理信息。
+        
+        Returns:
+            字典，包含所有可用代理的详细信息，包括ID、名称、描述、专业领域等
+        """
+        # 存储可用代理信息
         available_agents = {}
+        
+        # 遍历所有代理配置
         for agent_id, profile in Config.AGENT_PROFILES.items():
+            # 构建代理信息字典
             available_agents[agent_id] = {
-                "id": agent_id,
-                "name": profile.get("name", agent_id),
-                "description": profile.get("description", ""),
-                "expertise": profile.get("expertise_keywords", []),
-                "is_project_brain": agent_id == self.project_brain_id,
-                "type": profile.get("type", "specialist")
+                "id": agent_id,                                      # 代理ID
+                "name": profile.get("name", agent_id),              # 代理名称
+                "description": profile.get("description", ""),      # 代理描述
+                "expertise": profile.get("expertise_keywords", []),  # 专业领域关键词
+                "is_project_brain": agent_id == self.project_brain_id,  # 是否为项目大脑
+                "type": profile.get("type", "specialist")          # 代理类型
             }
+        
         return available_agents
     
     def _get_expert_memory_context(self, user_id: str, agent_id: str) -> str:
-        """获取专家相关的记忆上下文。"""
+        """获取专家相关的记忆上下文。
+        
+        Args:
+            user_id: 用户ID
+            agent_id: 专家代理ID
+            
+        Returns:
+            专家相关的记忆上下文字符串
+        """
         # 这里假设ChatEngine或底层有相应的方法支持按代理类型获取记忆
         # 实际实现可能需要根据记忆系统的具体实现调整
         return f"[专家领域相关记忆]"  # 占位符，实际实现时需要从记忆系统获取
     
     def _get_project_memory_context(self, user_id: str, agent_id: str) -> str:
-        """获取项目相关的记忆上下文。"""
+        """获取项目相关的记忆上下文。
+        
+        Args:
+            user_id: 用户ID
+            agent_id: 代理ID
+            
+        Returns:
+            项目相关的记忆上下文字符串
+        """
         return f"[项目相关记忆]"  # 占位符，实际实现时需要从记忆系统获取
     
     def _call_agent(
@@ -168,25 +270,39 @@ class MultiAgentController:
         extra_context: Optional[str],
         memory_type: Optional[str] = None
     ) -> ChatResponse:
-        """统一的代理调用封装，支持不同的记忆类型。"""
+        """统一的代理调用封装，支持不同的记忆类型。
+        
+        Args:
+            agent_id: 代理ID
+            prompt: 提示信息
+            user_id: 用户ID
+            session_id: 会话ID
+            persist_history: 是否持久化对话历史
+            extra_context: 额外的上下文信息
+            memory_type: 记忆类型，可选参数
+            
+        Returns:
+            ChatResponse对象，包含代理的响应内容
+        """
         try:
             # 构建记忆元数据，标识记忆类型
             memory_metadata = {}
             if memory_type:
                 memory_metadata["memory_type"] = memory_type
+                # 如果是专家记忆，记录专家领域
                 memory_metadata["expert_domain"] = agent_id if memory_type == "expert" else None
             
             # 打印调用信息以调试
             print(f"\n调试 - 调用代理: {agent_id}, 记忆类型: {memory_type}")
             print(f"调试 - 提示内容: {prompt[:100]}...")
             
+            # 调用聊天引擎生成响应
             response = self.chat_engine.generate_response(
                 prompt,
                 user_id=user_id,
                 agent_id=agent_id,
                 session_id=session_id,
                 persist_history=persist_history,
-                store_memory=True,
                 extra_context=extra_context,
                 memory_metadata=memory_metadata  # 传递记忆元数据
             )
@@ -215,11 +331,24 @@ class MultiAgentController:
             )
     
     def _build_project_brain_prompt(self, user_message: str) -> str:
+        """构建项目大脑的提示信息。
+        
+        Args:
+            user_message: 用户输入的消息内容
+            
+        Returns:
+            构建好的项目大脑提示信息
+        """
+        # 获取项目大脑的配置文件
         profile = Config.AGENT_PROFILES.get(self.project_brain_id, {})
+        # 获取项目大脑的指令
         instructions = profile.get("instructions", "")
+        # 获取项目大脑的名称
         name = profile.get("name", "项目大脑")
+        # 获取项目大脑的描述
         description = profile.get("description", "")
         
+        # 构建项目大脑提示
         return (
             f"你是 {name}，{description}\n"
             "作为项目大脑，你需要整合所有专家意见，协调各方面资源。\n"
@@ -238,10 +367,23 @@ class MultiAgentController:
         user_message: str,
         project_summary: str
     ) -> str:
-        """为特定专家构建专业prompt"""
+        """为特定专家构建专业prompt
+        
+        Args:
+            agent_id: 专家代理ID
+            user_message: 用户输入的消息内容
+            project_summary: 项目摘要
+            
+        Returns:
+            构建好的专家提示信息
+        """
+        # 获取专家的配置文件
         profile = Config.AGENT_PROFILES.get(agent_id, {})
+        # 获取专家的指令
         instructions = profile.get("instructions", "")
+        # 获取专家的名称
         name = profile.get("name", agent_id)
+        # 获取专家的表达风格
         style = profile.get("style", "专业、清晰")
         
         # 根据不同专家类型使用特定的prompt模板
@@ -263,7 +405,18 @@ class MultiAgentController:
             )
             
     def _build_product_expert_prompt(self, name, instructions, style, project_summary, user_message):
-        """产品专家专属prompt模板"""
+        """产品专家专属prompt模板
+        
+        Args:
+            name: 专家名称
+            instructions: 专家指令
+            style: 表达风格
+            project_summary: 项目摘要
+            user_message: 用户输入的消息内容
+            
+        Returns:
+            构建好的产品专家提示信息
+        """
         return (
             f"你是 {name}，一位资深产品专家。\n"
             "请基于用户需求和项目摘要，从产品角度进行深入分析并提供专业建议。\n"
@@ -281,7 +434,18 @@ class MultiAgentController:
         )
         
     def _build_algo_expert_prompt(self, name, instructions, style, project_summary, user_message):
-        """算法专家专属prompt模板"""
+        """算法专家专属prompt模板
+        
+        Args:
+            name: 专家名称
+            instructions: 专家指令
+            style: 表达风格
+            project_summary: 项目摘要
+            user_message: 用户输入的消息内容
+            
+        Returns:
+            构建好的算法专家提示信息
+        """
         return (
             f"你是 {name}，一位资深算法专家。\n"
             "请基于用户需求和项目摘要，从算法和技术角度进行深入分析并提供专业建议。\n"
@@ -300,7 +464,18 @@ class MultiAgentController:
         )
         
     def _build_architecture_expert_prompt(self, name, instructions, style, project_summary, user_message):
-        """架构师专属prompt模板"""
+        """架构师专属prompt模板
+        
+        Args:
+            name: 专家名称
+            instructions: 专家指令
+            style: 表达风格
+            project_summary: 项目摘要
+            user_message: 用户输入的消息内容
+            
+        Returns:
+            构建好的架构师提示信息
+        """
         return (
             f"你是 {name}，一位资深解决方案架构师。\n"
             "请基于用户需求和项目摘要，从系统架构和技术实现角度进行深入分析并提供专业建议。\n"
@@ -324,14 +499,28 @@ class MultiAgentController:
         project_summary: str,
         specialist_outputs: List[SpecialistResult]
     ) -> str:
+        """构建最终整合提示信息。
+        
+        Args:
+            user_message: 用户输入的消息内容
+            project_summary: 项目摘要
+            specialist_outputs: 专家输出结果列表
+            
+        Returns:
+            构建好的最终整合提示信息
+        """
+        # 构建专家反馈汇总部分
         specialist_section = "\n\n".join(
             f"- {self._get_agent_name(output.agent_id)} 专家反馈：{output.content}"
             for output in specialist_outputs
         ) or "暂无专家反馈。"
         
+        # 获取项目大脑的配置文件
         profile = Config.AGENT_PROFILES.get(self.project_brain_id, {})
+        # 获取项目大脑的名称
         name = profile.get("name", "项目大脑")
         
+        # 构建最终整合提示
         return (
             f"你是 {name}，需要整合所有专家意见，对用户给出结构化的项目方案。\n"
             "请输出：\n"
@@ -345,7 +534,16 @@ class MultiAgentController:
         )
     
     def _get_agent_name(self, agent_id: str) -> str:
-        """获取代理的名称。"""
+        """获取代理的名称。
+        
+        Args:
+            agent_id: 代理ID
+            
+        Returns:
+            代理的名称
+        """
+        # 获取代理的配置文件
         profile = Config.AGENT_PROFILES.get(agent_id, {})
+        # 返回代理的名称，如果没有配置则返回代理ID
         return profile.get("name", agent_id)
 

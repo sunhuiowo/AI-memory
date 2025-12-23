@@ -1,28 +1,47 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 """
-工具函数
+工具函数模块
+
+该模块包含应用程序中使用的各种辅助工具函数，包括：
+1. 日志配置设置
+2. 系统横幅打印
+3. 信号处理器设置
+4. 用户输入处理
 """
 
+# 导入必要的模块
 import logging
 import sys
 import signal
 from typing import Any, Optional
 
 def setup_logging(level: int = logging.INFO) -> logging.Logger:
-    """设置日志配置"""
+    """设置日志配置
+    
+    配置应用程序的日志记录，包括日志级别、格式和输出位置。
+    
+    Args:
+        level: 日志级别，默认值为logging.INFO
+        
+    Returns:
+        logging.Logger: 配置好的日志记录器实例
+    """
     logging.basicConfig(
-        level=level,
-        format='%(asctime)s - %(name)s - %(levelname)s - %(message)s',
+        level=level,                         # 设置日志级别
+        format='%(asctime)s - %(name)s - %(levelname)s - %(message)s',  # 日志格式
         handlers=[
-            logging.StreamHandler(sys.stdout),
-            logging.FileHandler('mem0_chat.log', encoding='utf-8')
+            logging.StreamHandler(sys.stdout),  # 输出到标准输出
+            logging.FileHandler('mem0_chat.log', encoding='utf-8')  # 输出到日志文件
         ]
     )
-    return logging.getLogger(__name__)
+    return logging.getLogger(__name__)  # 返回当前模块的日志记录器
 
 def print_banner():
-    """打印系统横幅"""
+    """打印系统横幅
+    
+    打印包含系统功能特点和命令说明的欢迎横幅。
+    """
     banner = """
     🧠 记忆增强聊天系统
     ========================================
@@ -48,24 +67,45 @@ def print_banner():
     print(banner)
 
 def setup_signal_handlers():
-    """设置信号处理器，确保Ctrl+C可以正常退出"""
+    """设置信号处理器，确保Ctrl+C可以正常退出
+    
+    配置SIGINT信号处理器，使系统能够优雅地响应Ctrl+C命令。
+    """
     def signal_handler(signum, frame):
+        """信号处理函数
+        
+        Args:
+            signum: 接收到的信号编号
+            frame: 当前的堆栈帧
+        """
         print("\n\n接收到退出信号，正在退出系统...")
         sys.exit(0)
     
-    signal.signal(signal.SIGINT, signal_handler)
+    signal.signal(signal.SIGINT, signal_handler)  # 设置SIGINT信号处理器
 
 def handle_user_input(prompt: str) -> Optional[str]:
-    """处理用户输入，支持中文和Ctrl+C"""
+    """处理用户输入，支持中文和Ctrl+C
+    
+    安全地获取用户输入，处理各种可能的异常情况。
+    
+    Args:
+        prompt: 输入提示字符串
+        
+    Returns:
+        Optional[str]: 用户输入的内容，如果发生错误则返回None
+    """
     try:
-        user_input = input(prompt).strip()
+        user_input = input(prompt).strip()  # 获取用户输入并去除首尾空白
         return user_input
     except (KeyboardInterrupt, EOFError):
+        # 处理Ctrl+C和文件结束符
         print("\n\n接收到退出信号，正在退出系统...")
         sys.exit(0)
     except UnicodeDecodeError:
+        # 处理编码错误
         print("\n❌ 输入编码错误，请重试")
         return None
     except Exception as e:
+        # 处理其他未知错误
         logging.error(f"输入处理错误: {e}")
         return None
